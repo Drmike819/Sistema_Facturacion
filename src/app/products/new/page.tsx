@@ -256,6 +256,8 @@ const CreateProduct = ()=>{
 
         setTimeout(() => setSuccess(false), 3000)
 
+        setTimeout(() => router.push('/login'), 3000)
+
     // Manejko de errores
     } catch (error: any) {
         console.error('Error creating product:', error)

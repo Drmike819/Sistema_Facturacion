@@ -12,7 +12,8 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
-  PRODUCTOS: '/dashboard/productos',
+  PRODUCTOS: '/products',
+  NEWPRODUCT: '/products/new',
   FACTURACION: '/dashboard/facturacion',
   ESTADISTICAS: '/dashboard/estadisticas',
 } as const;

@@ -1,9 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'
 import { ProductCardProps } from '@/types/product.types';
+import { id } from 'zod/v4/locales';
 
-const ProductCard: React.FC<ProductCardProps> = ({ name, description, price, imageUrl }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ id, name, description, price, imageUrl }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -63,21 +65,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, description, price, ima
                 </div>
                 
                 {/* Action button with improved design */}
-                <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
-                    <span className="flex items-center justify-center space-x-2">
-                        <span>Ver más</span>
-                            <svg 
-                                className={`w-4 h-4 transition-transform duration-300 ${
-                                    isHovered ? 'translate-x-1' : ''
-                                }`} 
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24"
-                                >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                    </span>
-                </button>
+                <Link href={`/products/${id}`}>
+                    <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                        <span className="flex items-center justify-center space-x-2">
+                            <span>Ver más</span>
+                                <svg 
+                                    className={`w-4 h-4 transition-transform duration-300 ${
+                                        isHovered ? 'translate-x-1' : ''
+                                    }`} 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    viewBox="0 0 24 24"
+                                    >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                        </span>
+                    </button>
+                </Link>
+                
             </div>
         
         {/* Subtle border glow effect */}

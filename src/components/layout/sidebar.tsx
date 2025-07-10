@@ -10,6 +10,9 @@ export function Sidebar() {
         <Link href={ROUTES.PRODUCTOS} className="block text-gray-700 hover:text-blue-600">
           Productos
         </Link>
+        <Link href={ROUTES.NEWPRODUCT} className="block text-gray-700 hover:text-blue-600">
+          Añadir un producto
+        </Link>
         <Link href={ROUTES.FACTURACION} className="block text-gray-700 hover:text-blue-600">
           Facturación
         </Link>

@@ -11,8 +11,8 @@ const ListProducts = () => {
 
   useEffect(() => {
     const GetAllProducts = async () => {
+      const response = await axios.get(URL);
       try {
-        const response = await axios.get(URL);
         setProducts(response.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {

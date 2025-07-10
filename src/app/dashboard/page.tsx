@@ -1,30 +1,11 @@
-"use client"
-
-import { ReactNode, useEffect } from 'react';
-import { redirect } from 'next/navigation';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import { isAuthenticated } from '@/lib/auth';
-import { Sidebar } from '@/components/layout/sidebar';
-import { Navbar } from '@/components/layout/navbar';
-
-export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { initializeAuth, isLoading, isAuthenticated: auth } = useAuth();
-
-  useEffect(() => {
-    initializeAuth();
-  }, [initializeAuth]);
-
-  if (!isLoading && !auth) {
-    redirect('/login');
-  }
-
+// src/app/dashboard/page.tsx
+export default function DashboardHome() {
   return (
-    <div className="min-h-screen flex">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main className="p-6 bg-gray-100 flex-1">{children}</main>
-      </div>
+    <div className="text-center">
+      <h1 className="text-3xl font-bold mb-4">Bienvenido al panel de AgroConexión 🌿</h1>
+      <p className="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+        Desde aquí puedes gestionar los productos, revisar pedidos y organizar tu inventario fácilmente.
+      </p>
     </div>
   );
 }

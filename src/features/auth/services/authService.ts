@@ -1,6 +1,5 @@
 import api from '@/lib/axios';
-import {LoginRequest, RegisterRequest, LoginResponse, RegisterResponse, FormField } 
-from '@/types/auth.types';
+import {LoginRequest, RegisterRequest, LoginResponse, RegisterResponse, FormField } from '@/types/auth.types';
 import { AUTH_ENDPOINTS } from '@/lib/constants';
 
 // Logica relacionada para la autenticacion del usuario

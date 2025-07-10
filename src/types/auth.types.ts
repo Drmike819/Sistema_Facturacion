@@ -49,19 +49,19 @@ export interface RegisterResponse {
 }
 
 // Modelo de formularios
-// export interface FormField {
-//   name: string;
-//   label: string;
-//   type: string;
-//   required: boolean;
-// }
+export interface FormField {
+  name: string;
+  label: string;
+  type: string;
+  required: boolean;
+}
 
-// // Respuesta de errores cual sale algo mal
-// export interface ApiError {
-//   detail?: string;
-//   username?: string[];
-//   email?: string[];
-//   password?: string[];
-//   password2?: string[];
-//   non_field_errors?: string[];
-// }
+// Respuesta de errores cual sale algo mal
+export interface ApiError {
+  detail?: string;
+  username?: string[];
+  email?: string[];
+  password?: string[];
+  password2?: string[];
+  non_field_errors?: string[];
+}

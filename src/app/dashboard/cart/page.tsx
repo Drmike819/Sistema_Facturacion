@@ -14,7 +14,7 @@ export default function CartPage() {
       {items.length === 0 ? (
         <p className="text-gray-600">
           El carrito está vacío.{" "}
-          <Link href="/dashboard/products" className="text-green-600 underline">
+          <Link href="/dashboard/productos" className="text-green-600 underline">
             Ver productos
           </Link>
         </p>

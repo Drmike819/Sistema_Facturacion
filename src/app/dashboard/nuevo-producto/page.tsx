@@ -1,20 +1,19 @@
-// src/app/dashboard/nuevo-producto/page.tsx
-
 "use client";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { opcionesCategorias, opcionesUnidades } from "@/lib/opciones";
+import { Leaf } from "lucide-react";
 
-// ✅ Esquema de validación con Zod
+// ✅ Esquema de validación de producto
 const schema = z.object({
-  nombre: z.string().min(1, "Nombre obligatorio"),
-  descripcion: z.string().min(10, "Mínimo 10 caracteres"),
-  precio: z.number().min(1, "Precio debe ser mayor a 0"),
-  stock: z.number().int().min(0, "Stock no puede ser negativo"),
-  unidad: z.string().min(1, "Selecciona una unidad"),
-  categoria: z.number().int(),
+  nombre: z.string().min(1, "El nombre es obligatorio"),
+  descripcion: z.string().min(10, "La descripción debe tener al menos 10 caracteres"),
+  precio: z.number().min(1, "El precio debe ser mayor a 0"),
+  stock: z.number().int().min(0, "El stock no puede ser negativo"),
+  unidad: z.string().min(1, "Debes seleccionar una unidad de medida"),
+  categoria: z.number().int({ message: "Selecciona una categoría válida" }),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -36,54 +35,71 @@ export default function NuevoProductoPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white dark:bg-neutral-900 p-6 rounded shadow">
-      <h2 className="text-2xl font-bold text-center text-green-700 mb-4">Crear Nuevo Producto</h2>
+    <div className="max-w-2xl mx-auto bg-green-50 dark:bg-neutral-900 p-8 rounded-xl shadow-md">
+      <div className="text-center mb-6">
+        <div className="flex justify-center items-center gap-2 text-green-700 dark:text-green-300">
+          <Leaf className="w-6 h-6" />
+          <h2 className="text-3xl font-bold">Registrar nuevo producto</h2>
+        </div>
+        <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm">
+          Ingresa la información del producto campesino que deseas agregar a AgroConexión.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
+        {/* Campo: Nombre */}
         <div>
+          <label className="block mb-1 font-semibold">Nombre del producto</label>
           <input
             {...register("nombre")}
-            placeholder="Nombre del producto"
-            className="w-full border p-2 rounded"
+            placeholder="Ej. Tomate chonto"
+            className="w-full border p-2 rounded focus:outline-green-600"
           />
           {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
         </div>
 
+        {/* Campo: Descripción */}
         <div>
+          <label className="block mb-1 font-semibold">Descripción</label>
           <textarea
             {...register("descripcion")}
-            placeholder="Descripción detallada"
+            placeholder="Describe el producto, su origen, calidad, etc."
             rows={3}
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded focus:outline-green-600"
           />
           {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion.message}</p>}
         </div>
 
+        {/* Campos: Precio y Stock */}
         <div className="grid grid-cols-2 gap-4">
           <div>
+            <label className="block mb-1 font-semibold">Precio (COP)</label>
             <input
               {...register("precio", { valueAsNumber: true })}
               type="number"
               step="0.01"
-              placeholder="Precio"
-              className="w-full border p-2 rounded"
+              placeholder="Ej. 3000"
+              className="w-full border p-2 rounded focus:outline-green-600"
             />
             {errors.precio && <p className="text-red-500 text-sm">{errors.precio.message}</p>}
           </div>
 
           <div>
+            <label className="block mb-1 font-semibold">Cantidad en stock</label>
             <input
               {...register("stock", { valueAsNumber: true })}
               type="number"
-              placeholder="Stock"
-              className="w-full border p-2 rounded"
+              placeholder="Ej. 10"
+              className="w-full border p-2 rounded focus:outline-green-600"
             />
             {errors.stock && <p className="text-red-500 text-sm">{errors.stock.message}</p>}
           </div>
         </div>
 
+        {/* Campo: Unidad de medida */}
         <div>
-          <select {...register("unidad")} className="w-full border p-2 rounded">
+          <label className="block mb-1 font-semibold">Unidad de medida</label>
+          <select {...register("unidad")} className="w-full border p-2 rounded focus:outline-green-600">
             <option value="">Selecciona una unidad</option>
             {opcionesUnidades.map((op) => (
               <option key={op.value} value={op.value}>
@@ -94,8 +110,13 @@ export default function NuevoProductoPage() {
           {errors.unidad && <p className="text-red-500 text-sm">{errors.unidad.message}</p>}
         </div>
 
+        {/* Campo: Categoría */}
         <div>
-          <select {...register("categoria", { valueAsNumber: true })} className="w-full border p-2 rounded">
+          <label className="block mb-1 font-semibold">Categoría</label>
+          <select
+            {...register("categoria", { valueAsNumber: true })}
+            className="w-full border p-2 rounded focus:outline-green-600"
+          >
             <option value="">Selecciona una categoría</option>
             {opcionesCategorias.map((op) => (
               <option key={op.value} value={op.value}>
@@ -106,15 +127,19 @@ export default function NuevoProductoPage() {
           {errors.categoria && <p className="text-red-500 text-sm">{errors.categoria.message}</p>}
         </div>
 
+        {/* Botón */}
         <button
           type="submit"
-          className="bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800"
+          className="bg-green-700 text-white font-semibold py-2 px-4 rounded hover:bg-green-800 transition"
         >
           Crear producto
         </button>
 
+        {/* Mensaje de éxito */}
         {isSubmitSuccessful && (
-          <p className="text-green-600 text-sm text-center mt-2">✅ Producto registrado correctamente</p>
+          <p className="text-green-700 dark:text-green-400 text-sm text-center mt-2">
+            ✅ Producto registrado correctamente.
+          </p>
         )}
       </form>
     </div>

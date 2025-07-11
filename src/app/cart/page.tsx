@@ -6,6 +6,7 @@ import { Sidebar } from '@/components/layout/sidebar';
 import { Navbar } from '@/components/layout/navbar';
 import { Minus, Plus } from 'lucide-react';
 import EliminarProducto from '@/components/cart/eliminar';
+import BuyCart from '@/components/cart/ComprarCarrito'
 
 const GetCarrito = () => {
   const [cartProducts, setCartProducts] =  useState<CartProduct[]>([]);
@@ -105,6 +106,7 @@ const GetCarrito = () => {
                 ))}
               </ul>
             )}
+            <BuyCart/>
           </div>
         </main>
       </div>

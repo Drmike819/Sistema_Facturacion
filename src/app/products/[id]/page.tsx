@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Navbar } from '@/components/layout/navbar';
 import AgregarCarrito from '@/components/cart/agregar';
+import BuyProduct from '@/components/cart/ComprarProducto';
 
 const DetailProduct = () => {
     const [product, setProduct] = useState<Product | null>(null);
@@ -284,10 +285,7 @@ const DetailProduct = () => {
                                             </svg>
                                         </button>
                                     </div>
-                                    
-                                    <button className="w-full bg-gray-900 text-white py-4 px-8 rounded-xl hover:bg-gray-800 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                                        Comprar Ahora
-                                    </button>
+                                    <BuyProduct productId={product.id}/>
                                 </div>
 
                                 {/* Información de entrega */}

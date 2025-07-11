@@ -11,10 +11,9 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  DASHBOARD: '/dashboard',
   PRODUCTOS: '/products',
   CARRITO: '/cart',
   NEWPRODUCT: '/products/new',
-  FACTURACION: '/dashboard/facturacion',
-  ESTADISTICAS: '/dashboard/estadisticas',
+  FACTURACION: '/invoices',
+  ESTADISTICAS: '/finansas',
 } as const;

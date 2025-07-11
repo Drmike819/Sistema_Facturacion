@@ -14,16 +14,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     initializeAuth();
   }, [initializeAuth]);
 
-  if (!isLoading && !auth) {
-    redirect('/login');
-  }
+  // if (!isLoading && !auth) {
+  //   redirect('/login');
+  // }
 
   return (
     <div className="min-h-screen flex">
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="p-6 bg-gray-100 flex-1">{children}</main>
+        <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">{children}</main>
       </div>
     </div>
   );

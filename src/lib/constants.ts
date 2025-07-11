@@ -13,6 +13,7 @@ export const ROUTES = {
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
   PRODUCTOS: '/products',
+  CARRITO: '/cart',
   NEWPRODUCT: '/products/new',
   FACTURACION: '/dashboard/facturacion',
   ESTADISTICAS: '/dashboard/estadisticas',

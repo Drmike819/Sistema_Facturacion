@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import {isAuthenticated, getStoredTokens} from '@/lib/auth'
 import axios from 'axios';
 import api from '@/lib/axios'
-
+import { Sidebar } from '@/components/layout/sidebar';
+import { Navbar } from '@/components/layout/navbar';
 const CreateProduct = ()=>{
     const router = useRouter()
     const [errores, setError] = useState('')
@@ -280,273 +281,283 @@ const CreateProduct = ()=>{
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md my-10">
-            <h2 className="text-center text-2xl mt-8 font-bold mb-6 text-gray-800">Crear Nuevo Producto</h2>
-            
-            {success && (
-                <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded text-center">
-                    ¡Producto creado exitosamente!
-                </div>
-            )}
-            
-            {errores && (
-                <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded text-center">
-                    {errores}
-                </div>
-            )}
-            
-            <form onSubmit={handleSubmit} className="space-y-6 text-black">
-                {/* Nombre del producto */}
-                <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-1  text-black">
-                        Nombre del Producto
-                    </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={form.name}
-                        onChange={hanleChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                        placeholder="Ingresa el nombre del producto"
-                        required
-                    />
-                </div>
 
-                {/* Descripción */}
-                <div>
-                    <label htmlFor="description" className="block text-sm font-medium  text-black mb-1">
-                        Descripción
-                    </label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={form.description}
-                        onChange={hanleChange}
-                        rows={4}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Describe el producto..."
-                        required
-                    />
-                </div>
-
-                {/* Precio y Stock */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="price" className="block text-sm font-medium  text-black mb-1">
-                            Precio
-                        </label>
-                        <input
-                            type="number"
-                            id="price"
-                            name="price"
-                            value={form.price}
-                            onChange={hanleChange}
-                            min="0"
-                            step="0.01"
-                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                            placeholder="0.00"
-                            required
-                        />
-                    </div>
+        <div className="min-h-screen flex">
+              <Sidebar />
+              <div className="flex flex-col flex-1">
+                <Navbar />
+                <main className="p-6 bg-gray-100 flex-1">
+                  <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md my-10">
+                    <h2 className="text-center text-2xl mt-8 font-bold mb-6 text-gray-800">Crear Nuevo Producto</h2>
                     
-                    <div>
-                        <label htmlFor="stock" className="block text-sm font-medium  text-black mb-1">
-                            Stock
-                        </label>
-                        <input
-                            type="number"
-                            id="stock"
-                            name="stock"
-                            value={form.stock}
-                            onChange={hanleChange}
-                            min="0"
-                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                            placeholder="0"
-                            required
-                        />
-                    </div>
-                </div>
-
-                {/* Categorías - Dropdown */}
-                <div>
-                    <label className="block text-sm font-medium  text-black mb-2">
-                        Categorías
-                    </label>
-                    <div className="relative">
-                        <button
-                            type="button"
-                            onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-                            className="w-full p-3 border border-gray-300 rounded-md bg-white text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent flex justify-between items-center"
-                        >
-                            <span className=" text-black">
-                                {form.category.length === 0 
-                                    ? 'Selecciona categorías...' 
-                                    : `${form.category.length} categoría(s) seleccionada(s)`
-                                }
-                            </span>
-                            <svg className={`w-5 h-5 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        
-                        {categoryDropdownOpen && (
-                            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                {categories.map((category) => (
-                                    <label key={category.id} className="flex items-center p-3 hover:bg-gray-50 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={form.category.some(cat => cat.id === category.id)}
-                                            onChange={() => hanleChangeCategory(category.id)}
-                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
-                                        />
-                                        <span className="text-gray-700">{category.name}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    
-                    {form.category.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {form.category.map(cat => (
-                                <span key={cat.id} className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
-                                    {cat.name}
-                                    <button
-                                        type="button"
-                                        onClick={() => hanleChangeCategory(cat.id)}
-                                        className="ml-1 text-blue-600 hover:text-blue-800"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
+                    {success && (
+                        <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded text-center">
+                            ¡Producto creado exitosamente!
                         </div>
                     )}
-                </div>
-
-                {/* Unidades de medida - Dropdown */}
-                <div>
-                    <label className="block text-sm font-medium  text-black mb-2">
-                        Unidades de Medida *
-                    </label>
-                    <div className="relative">
-                        <button
-                            type="button"
-                            onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
-                            className="w-full p-3 border border-gray-300 rounded-md bg-white text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent flex justify-between items-center"
-                        >
-                            <span className="text-gray-700">
-                                {form.unit_of_measure.length === 0 
-                                    ? 'Selecciona unidades de medida...' 
-                                    : `${form.unit_of_measure.length} unidad(es) seleccionada(s)`
-                                }
-                            </span>
-                            <svg className={`w-5 h-5 transition-transform ${unitDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        
-                        {unitDropdownOpen && (
-                            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                {unitOptions.map((unit) => (
-                                    <label key={unit.value} className="flex items-center p-3 hover:bg-gray-50 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={form.unit_of_measure.some(u => u.value === unit.value)}
-                                            onChange={() => hanleChangeUnit(unit.value)}
-                                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
-                                        />
-                                        <span className="text-gray-700">{unit.label}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        )}
-                    </div>
                     
-                    {form.unit_of_measure.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {form.unit_of_measure.map(unit => (
-                                <span key={unit.value} className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-                                    {unit.label}
-                                    <button
-                                        type="button"
-                                        onClick={() => hanleChangeUnit(unit.value)}
-                                        className="ml-1 text-green-600 hover:text-green-800"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
+                    {errores && (
+                        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded text-center">
+                            {errores}
                         </div>
                     )}
-                </div>
-
-                {/* Imágenes */}
-                <div>
-                    <label htmlFor="images" className="block text-sm font-medium  text-black mb-2">
-                        Imágenes del Producto
-                    </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                        <input
-                            type="file"
-                            id="images"
-                            name="images"
-                            multiple
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                        />
-                        <label htmlFor="images" className="cursor-pointer">
-                            <div className="flex flex-col items-center">
-                                <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                                <p className="text-gray-600 mb-2">Haz clic aquí para subir imágenes</p>
-                                <p className="text-sm text-gray-500">PNG, JPG, GIF hasta 10MB</p>
-                            </div>
-                        </label>
-                    </div>
                     
-                    {/* Preview de imágenes mejorado */}
-                    {form.images.length > 0 && (
-                        <div className="mt-4">
-                            <h4 className="text-sm font-medium  text-black mb-2">Imágenes seleccionadas:</h4>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {form.images.map((image, index) => (
-                                    <div key={index} className="relative group">
-                                        <img
-                                            src={image.image}
-                                            alt={`Preview ${index + 1}`}
-                                            className="w-full h-32 object-cover rounded-lg border-2 border-gray-200 group-hover:border-blue-400 transition-colors"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => removeImage(index)}
-                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors shadow-md"
-                                        >
-                                            ×
-                                        </button>
-                                        <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                                            {index + 1}
-                                        </div>
+                    <form onSubmit={handleSubmit} className="space-y-6 text-black border-gray-500">
+                        {/* Nombre del producto */}
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium mb-1  text-black">
+                                Nombre del Producto
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={form.name}
+                                onChange={hanleChange}
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                                placeholder="Ingresa el nombre del producto"
+                                required
+                            />
+                        </div>
+
+                        {/* Descripción */}
+                        <div>
+                            <label htmlFor="description" className="block text-sm font-medium  text-black mb-1">
+                                Descripción
+                            </label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                value={form.description}
+                                onChange={hanleChange}
+                                rows={4}
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Describe el producto..."
+                                required
+                            />
+                        </div>
+
+                        {/* Precio y Stock */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="price" className="block text-sm font-medium  text-black mb-1">
+                                    Precio
+                                </label>
+                                <input
+                                    type="number"
+                                    id="price"
+                                    name="price"
+                                    value={form.price}
+                                    onChange={hanleChange}
+                                    min="0"
+                                    step="0.01"
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                                    placeholder="0.00"
+                                    required
+                                />
+                            </div>
+                            
+                            <div>
+                                <label htmlFor="stock" className="block text-sm font-medium  text-black mb-1">
+                                    Stock
+                                </label>
+                                <input
+                                    type="number"
+                                    id="stock"
+                                    name="stock"
+                                    value={form.stock}
+                                    onChange={hanleChange}
+                                    min="0"
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                                    placeholder="0"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Categorías - Dropdown */}
+                        <div>
+                            <label className="block text-sm font-medium  text-black mb-2">
+                                Categorías
+                            </label>
+                            <div className="relative">
+                                <button
+                                    type="button"
+                                    onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                                    className="w-full p-3 border border-gray-300 rounded-md bg-white text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent flex justify-between items-center"
+                                >
+                                    <span className=" text-black">
+                                        {form.category.length === 0 
+                                            ? 'Selecciona categorías...' 
+                                            : `${form.category.length} categoría(s) seleccionada(s)`
+                                        }
+                                    </span>
+                                    <svg className={`w-5 h-5 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                
+                                {categoryDropdownOpen && (
+                                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                        {categories.map((category) => (
+                                            <label key={category.id} className="flex items-center p-3 hover:bg-gray-50 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={form.category.some(cat => cat.id === category.id)}
+                                                    onChange={() => hanleChangeCategory(category.id)}
+                                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
+                                                />
+                                                <span className="text-gray-700">{category.name}</span>
+                                            </label>
+                                        ))}
                                     </div>
-                                ))}
+                                )}
                             </div>
+                            
+                            {form.category.length > 0 && (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {form.category.map(cat => (
+                                        <span key={cat.id} className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                                            {cat.name}
+                                            <button
+                                                type="button"
+                                                onClick={() => hanleChangeCategory(cat.id)}
+                                                className="ml-1 text-blue-600 hover:text-blue-800"
+                                            >
+                                                ×
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
 
-                {/* Botón de envío */}
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
-                >
-                    {loading ? 'Creando Producto...' : 'Crear Producto'}
-                </button>
-            </form>
-        </div>
+                        {/* Unidades de medida - Dropdown */}
+                        <div>
+                            <label className="block text-sm font-medium  text-black mb-2">
+                                Unidades de Medida *
+                            </label>
+                            <div className="relative">
+                                <button
+                                    type="button"
+                                    onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
+                                    className="w-full p-3 border border-gray-300 rounded-md bg-white text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent flex justify-between items-center"
+                                >
+                                    <span className="text-gray-700">
+                                        {form.unit_of_measure.length === 0 
+                                            ? 'Selecciona unidades de medida...' 
+                                            : `${form.unit_of_measure.length} unidad(es) seleccionada(s)`
+                                        }
+                                    </span>
+                                    <svg className={`w-5 h-5 transition-transform ${unitDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                
+                                {unitDropdownOpen && (
+                                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                        {unitOptions.map((unit) => (
+                                            <label key={unit.value} className="flex items-center p-3 hover:bg-gray-50 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={form.unit_of_measure.some(u => u.value === unit.value)}
+                                                    onChange={() => hanleChangeUnit(unit.value)}
+                                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
+                                                />
+                                                <span className="text-gray-700">{unit.label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {form.unit_of_measure.length > 0 && (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {form.unit_of_measure.map(unit => (
+                                        <span key={unit.value} className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                                            {unit.label}
+                                            <button
+                                                type="button"
+                                                onClick={() => hanleChangeUnit(unit.value)}
+                                                className="ml-1 text-green-600 hover:text-green-800"
+                                            >
+                                                ×
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Imágenes */}
+                        <div>
+                            <label htmlFor="images" className="block text-sm font-medium  text-black mb-2">
+                                Imágenes del Producto
+                            </label>
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                                <input
+                                    type="file"
+                                    id="images"
+                                    name="images"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="hidden"
+                                />
+                                <label htmlFor="images" className="cursor-pointer">
+                                    <div className="flex flex-col items-center">
+                                        <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
+                                        <p className="text-gray-600 mb-2">Haz clic aquí para subir imágenes</p>
+                                        <p className="text-sm text-gray-500">PNG, JPG, GIF hasta 10MB</p>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            {/* Preview de imágenes mejorado */}
+                            {form.images.length > 0 && (
+                                <div className="mt-4">
+                                    <h4 className="text-sm font-medium  text-black mb-2">Imágenes seleccionadas:</h4>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        {form.images.map((image, index) => (
+                                            <div key={index} className="relative group">
+                                                <img
+                                                    src={image.image}
+                                                    alt={`Preview ${index + 1}`}
+                                                    className="w-full h-32 object-cover rounded-lg border-2 border-gray-200 group-hover:border-blue-400 transition-colors"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(index)}
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors shadow-md"
+                                                >
+                                                    ×
+                                                </button>
+                                                <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                                                    {index + 1}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Botón de envío */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                        >
+                            {loading ? 'Creando Producto...' : 'Crear Producto'}
+                        </button>
+                    </form>
+                </div>
+                  </main>
+              </div>
+            </div>
+        
     )
 }
 

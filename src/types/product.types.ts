@@ -1,3 +1,8 @@
+export interface Categories{
+  id: number
+  name: string
+  description: string
+}
 
 export interface ProductCardProps {
   id:number
@@ -25,7 +30,7 @@ export interface Image {
   image: string
 }
 
-export interface Category{
+export interface CategoryProducs{
   id: number
   name: string
   description: string
@@ -39,5 +44,5 @@ export interface NewProduct {
   stock: number
   unit_of_measure: UnitOfMeasure[]
   images: Image[]
-  category: Category[]
+  category: CategoryProducs[]
 }

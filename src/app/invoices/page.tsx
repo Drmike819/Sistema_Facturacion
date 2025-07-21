@@ -5,25 +5,9 @@ import api from '@/lib/axios';
 import { toast } from 'sonner';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { Sidebar } from '@/components/layout/sidebar';
-import { Navbar } from '@/components/layout/navbar';
 import { isAuthenticated as checkAuth, getStoredTokens } from '@/lib/auth';
 
-interface InvoiceDetail {
-  product_name: string;
-  seller_name: string;
-  quantity: number;
-  unit_price: string;
-  subtotal: string;
-}
 
-interface Invoice {
-  id: number;
-  date_created: string;
-  method: string;
-  total: string;
-  details: InvoiceDetail[];
-}
 
 const ListInvoices = () => {
   const router = useRouter();
@@ -89,120 +73,80 @@ const ListInvoices = () => {
   // Mostrar un loading inicial hasta que el componente esté montado
   if (!hasMounted) {
     return (
-      <div className="min-h-screen flex">
-        <Sidebar />
-        <div className="flex flex-col flex-1">
-          <Navbar />
-          <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-            <div className="text-center py-10 text-gray-500">Cargando...</div>
-          </main>
-        </div>
-      </div>
+      <div className="text-center py-10 text-gray-500">Cargando...</div>
     );
   }
 
   if (!isClientAuthenticated) {
     return (
-      <div className="min-h-screen flex">
-        <Sidebar />
-        <div className="flex flex-col flex-1">
-          <Navbar />
-          <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-            <div className="text-center text-red-600 font-semibold mt-10">
-              {error || 'Debes iniciar sesión para ver tus facturas.'}
-            </div>
-          </main>
-        </div>
+      <div className="text-center text-red-600 font-semibold mt-10">
+        {error || 'Debes iniciar sesión para ver tus facturas.'}
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex">
-        <Sidebar />
-        <div className="flex flex-col flex-1">
-          <Navbar />
-          <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-            <div className="text-center py-10 text-gray-500">Cargando facturas...</div>
-          </main>
-        </div>
-      </div>
+      <div className="text-center py-10 text-gray-500">Cargando facturas...</div>
     );
   }
 
   if (invoices.length === 0) {
     return (
-      <div className="min-h-screen flex">
-        <Sidebar />
-        <div className="flex flex-col flex-1">
-          <Navbar />
-          <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-            <div className="text-center py-10 text-gray-500">No tienes facturas registradas.</div>
-          </main>
-        </div>
-      </div>
+      <div className="text-center py-10 text-gray-500">No tienes facturas registradas.</div>
     );
   }
 
   return (
-    <div className="min-h-screen flex">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-          <div className="max-w-5xl mx-auto py-10 px-4">
-            <h1 className="text-3xl font-bold mb-6">Mis Facturas</h1>
-            {invoices.map((invoice) => (
-              <div
-                key={invoice.id}
-                className="bg-white shadow-md rounded-xl mb-4 p-4 border border-gray-200 cursor-pointer hover:bg-gray-50 transition"
-                onClick={() => toggleDetails(invoice.id)}
-              >
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-gray-800">Factura #{invoice.id}</h2>
-                  <span className="text-sm text-gray-500">
-                    {formatDate(invoice.date_created)}
-                  </span>
-                </div>
-                <div className="mt-2 text-sm text-gray-700">
-                  <p><strong>Método de Pago:</strong> {invoice.method.replace('_', ' ')}</p>
-                  <p><strong>Total:</strong> ${formatCurrency(invoice.total)}</p>
-                </div>
-
-                {expandedInvoice === invoice.id && invoice.details.length > 0 && (
-                  <table className="w-full mt-4 text-sm table-auto border-t border-b border-gray-300">
-                    <thead>
-                      <tr className="text-left text-gray-600 border-b">
-                        <th className="py-2">Producto</th>
-                        <th className="py-2">Vendedor</th>
-                        <th className="py-2">Cantidad</th>
-                        <th className="py-2">Precio Unitario</th>
-                        <th className="py-2">Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {invoice.details.map((item, index) => (
-                        <tr key={index} className="border-b last:border-none text-black">
-                          <td className="py-2">{item.product_name}</td>
-                          <td className="py-2">{item.seller_name}</td>
-                          <td className="py-2">{item.quantity}</td>
-                          <td className="py-2">${formatCurrency(item.unit_price)}</td>
-                          <td className="py-2">${formatCurrency(item.subtotal)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-
-                {expandedInvoice === invoice.id && invoice.details.length === 0 && (
-                  <p className="text-sm text-gray-500 mt-2">Esta factura no tiene productos.</p>
-                )}
-              </div>
-            ))}
+    <div className="max-w-5xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-bold mb-6">Mis Facturas</h1>
+      {invoices.map((invoice) => (
+        <div
+          key={invoice.id}
+          className="bg-white shadow-md rounded-xl mb-4 p-4 border border-gray-200 cursor-pointer hover:bg-gray-50 transition"
+          onClick={() => toggleDetails(invoice.id)}
+        >
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-800">Factura #{invoice.id}</h2>
+            <span className="text-sm text-gray-500">
+              {formatDate(invoice.date_created)}
+            </span>
           </div>
-        </main>
-      </div>
+          <div className="mt-2 text-sm text-gray-700">
+            <p><strong>Método de Pago:</strong> {invoice.method.replace('_', ' ')}</p>
+            <p><strong>Total:</strong> ${formatCurrency(invoice.total)}</p>
+          </div>
+
+          {expandedInvoice === invoice.id && invoice.details.length > 0 && (
+            <table className="w-full mt-4 text-sm table-auto border-t border-b border-gray-300">
+              <thead>
+                <tr className="text-left text-gray-600 border-b">
+                  <th className="py-2">Producto</th>
+                  <th className="py-2">Vendedor</th>
+                  <th className="py-2">Cantidad</th>
+                  <th className="py-2">Precio Unitario</th>
+                  <th className="py-2">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoice.details.map((item, index) => (
+                  <tr key={index} className="border-b last:border-none text-black">
+                    <td className="py-2">{item.product_name}</td>
+                    <td className="py-2">{item.seller_name}</td>
+                    <td className="py-2">{item.quantity}</td>
+                    <td className="py-2">${formatCurrency(item.unit_price)}</td>
+                    <td className="py-2">${formatCurrency(item.subtotal)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {expandedInvoice === invoice.id && invoice.details.length === 0 && (
+            <p className="text-sm text-gray-500 mt-2">Esta factura no tiene productos.</p>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

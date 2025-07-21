@@ -38,77 +38,71 @@ const GetCarrito = () => {
 
   return (
     <div className="min-h-screen flex">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main className="mt-16 ml-64 p-6 bg-gray-100 flex-1">
-          <div className="max-w-4xl mx-auto py-8 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🛒 Carrito de Compras</h2>
+     <div className="max-w-4xl mx-auto py-8 px-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🛒 Carrito de Compras</h2>
 
-            {cartProducts.length === 0 ? (
-              <p className="text-center text-gray-500">No hay productos en el carrito.</p>
-            ) : (
-              <ul className="space-y-6">
-                {cartProducts.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex flex-col md:flex-row items-center justify-between p-6 bg-gray-400 rounded-2xl shadow-lg transition hover:shadow-xl"
+        {cartProducts.length === 0 ? (
+          <p className="text-center text-gray-500">No hay productos en el carrito.</p>
+        ) : (
+          <ul className="space-y-6">
+            {cartProducts.map((item) => (
+              <li
+                key={item.id}
+                className="flex flex-col md:flex-row items-center justify-between p-6 bg-gray-400 rounded-2xl shadow-lg transition hover:shadow-xl"
+              >
+                <div className="flex items-center space-x-6 w-full md:w-2/3">
+                  <div className="w-24 h-24 relative rounded-xl overflow-hidden border border-gray-200">
+                    <Image
+                      src={
+                        item.product.images.length > 0
+                          ? `http://127.0.0.1:8000${item.product.images[0].image}`
+                          : '/placeholder.png'
+                      }
+                      alt={item.product.name}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-800">{item.product.name}</h3>
+                    <p className="text-sm text-gray-500 mb-1">{item.product.description}</p>
+                    <p className="text-md font-bold text-green-600">${item.product.price}</p>
+                  </div>
+                </div>
+
+                <div className="mt-4 md:mt-0 flex items-center space-x-3">
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(
+                        item.product.id,
+                        Math.max(item.quantity - 1, 1)
+                      )
+                    }
+                    className="w-9 h-9 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200"
                   >
-                    <div className="flex items-center space-x-6 w-full md:w-2/3">
-                      <div className="w-24 h-24 relative rounded-xl overflow-hidden border border-gray-200">
-                        <Image
-                          src={
-                            item.product.images.length > 0
-                              ? `http://127.0.0.1:8000${item.product.images[0].image}`
-                              : '/placeholder.png'
-                          }
-                          alt={item.product.name}
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-800">{item.product.name}</h3>
-                        <p className="text-sm text-gray-500 mb-1">{item.product.description}</p>
-                        <p className="text-md font-bold text-green-600">${item.product.price}</p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 md:mt-0 flex items-center space-x-3">
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(
-                            item.product.id,
-                            Math.max(item.quantity - 1, 1)
-                          )
-                        }
-                        className="w-9 h-9 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200"
-                      >
-                        <Minus size={18} />
-                      </button>
-                      <span className="text-lg font-medium w-6 text-center text-zinc-950">{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(
-                            item.product.id,
-                            item.quantity + 1
-                          )
-                        }
-                        className="w-9 h-9 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200"
-                      >
-                        <Plus size={18} />
-                      </button>
-                    </div>
-                    <div className='ml-3'>
-                      <EliminarProducto productId={item.product.id}/>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <BuyCart/>
-          </div>
-        </main>
+                    <Minus size={18} />
+                  </button>
+                  <span className="text-lg font-medium w-6 text-center text-zinc-950">{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(
+                        item.product.id,
+                        item.quantity + 1
+                      )
+                    }
+                    className="w-9 h-9 flex items-center justify-center bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200"
+                  >
+                    <Plus size={18} />
+                  </button>
+                </div>
+                <div className='ml-3'>
+                  <EliminarProducto productId={item.product.id}/>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        <BuyCart/>
       </div>
     </div>
   );
